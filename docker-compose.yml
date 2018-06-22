@@ -29,6 +29,7 @@ services:
     environment:
       - LOAD_EX=n
       - EXECUTOR=Local
+      - AIRFLOW__CORE__FERNET_KEY=qVNxQdLtcUpNfVz2FensOPzZB6qJMPK7nfN8einN3X4=
     volumes:
       - ./src/dags:/usr/local/airflow/dags
       - ./src/sql:/usr/local/airflow/sql
