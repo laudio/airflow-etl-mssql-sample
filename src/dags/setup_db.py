@@ -30,7 +30,7 @@ dag = airflow.DAG(
 t0 = MsSqlOperator(
     task_id='otfn_teardown',
     sql='teardown.sql',
-    mssql_conn_id='mssql',
+    mssql_conn_id='mssql_datalake',
     dag=dag
 )
 
@@ -38,7 +38,7 @@ t0 = MsSqlOperator(
 t1 = MsSqlOperator(
     task_id='create_otfn_schema',
     sql='create_otfn_schema.sql',
-    mssql_conn_id='mssql',
+    mssql_conn_id='mssql_datalake',
     dag=dag
 )
 
@@ -46,7 +46,7 @@ t1 = MsSqlOperator(
 t2 = MsSqlOperator(
     task_id='create_otfn_timesheet_table',
     sql='create_otfn_timesheet_table.sql',
-    mssql_conn_id='mssql',
+    mssql_conn_id='mssql_datalake',
     dag=dag
 )
 

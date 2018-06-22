@@ -30,7 +30,7 @@ dag = airflow.DAG(
 t0 = MsSqlOperator(
     task_id='clear_timesheet_data',
     sql='DELETE FROM otfn.timesheet',
-    mssql_conn_id='mssql',
+    mssql_conn_id='mssql_datalake',
     dag=dag
 )
 
@@ -38,7 +38,7 @@ t1 = MsSqlDataImportOperator(
     task_id='import_timesheet_data',
     table_name='otfn.timesheet',
     data_file=Variable.get('data_file_path') + '/timesheet.csv',
-    mssql_conn_id='mssql',
+    mssql_conn_id='mssql_datalake',
     dag=dag
 )
 
