@@ -6,11 +6,11 @@ import airflow
 import logging
 
 from datetime import datetime, timedelta
-from acme.operators.mssql_operator import MsSqlOperator
-from acme.operators.mssql_import_operator import MsSqlDataImportOperator, MsSqlImportFromQueryOperator
 from airflow import models
 from airflow.settings import Session
 from airflow.models import Variable
+
+from acme.operators import MsSqlOperator, MsSqlDataImportOperator, MsSqlImportFromQueryOperator
 
 
 args = {

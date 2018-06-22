@@ -2,12 +2,12 @@
 
 from __future__ import print_function
 import airflow
+import logging
 from datetime import datetime, timedelta
-from acme.operators.mssql_operator import MsSqlOperator
 from airflow import models
 from airflow.settings import Session
 from airflow.models import Variable
-import logging
+from acme.operators import MsSqlOperator
 
 
 args = {
