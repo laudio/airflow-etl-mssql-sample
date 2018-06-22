@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import print_function
+import airflow
+from datetime import datetime, timedelta
+from acme.operators.mssql_operator import MsSqlOperator
+from airflow import models
+from airflow.settings import Session
+from airflow.models import Variable
+import logging
+
+
+args = {
+    'owner': 'airflow',
+    'start_date': airflow.utils.dates.days_ago(7),
+    'provide_context': True
+}
+
+tmpl_search_path = Variable.get('sql_path')
+
+dag = airflow.DAG(
+    'setup_db',
+    schedule_interval="@once",
+    default_args=args,
+    template_searchpath=tmpl_search_path,
+    max_active_runs=1
+)
+
+# Teardown - drop all tables/schema if they exist
+t0 = MsSqlOperator(
+    task_id='otfn_teardown',
+    sql='teardown.sql',
+    mssql_conn_id='mssql',
+    dag=dag
+)
+
+# Create Schema
+t1 = MsSqlOperator(
+    task_id='create_otfn_schema',
+    sql='create_otfn_schema.sql',
+    mssql_conn_id='mssql',
+    dag=dag
+)
+
+# Create timesheet table (Data Lake)
+t2 = MsSqlOperator(
+    task_id='create_otfn_timesheet_table',
+    sql='create_otfn_timesheet_table.sql',
+    mssql_conn_id='mssql',
+    dag=dag
+)
+
+# Create otfn table (Application)
+t3 = MsSqlOperator(
+    task_id='create_otfn_otfn_table',
+    sql='create_otfn_otfn_table.sql',
+    mssql_conn_id='mssql_app',
+    dag=dag
+)
+
+# Execution Order
+t0 >> t1 >> t2 >> t3

@@ -1,0 +1,39 @@
+version: '2'
+services:
+  postgres:
+    image: postgres:9.6
+    container_name: airflow-db
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    ports:
+      - 5444:5432
+
+  mssql:
+    image: microsoft/mssql-server-linux:latest
+    container_name: airflow-mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Th1sS3cret!
+    ports:
+      - 1444:1433
+
+  webserver:
+    image: laudio/airflow-mssql:1.0.1
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      - postgres
+      - mssql
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
+    volumes:
+      - ./src/dags:/usr/local/airflow/dags
+      - ./src/sql:/usr/local/airflow/sql
+      - ./data:/usr/local/airflow/data
+    ports:
+      - 8081:8080
+    command: webserver
+
