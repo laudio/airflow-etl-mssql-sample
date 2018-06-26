@@ -6,6 +6,8 @@ import subprocess
 from tempfile import mkstemp
 from airflow.hooks.dbapi_hook import DbApiHook
 
+from acme.utils import *
+
 
 class BcpHook(DbApiHook):
     '''
@@ -89,10 +91,10 @@ class SqlcmdHook(DbApiHook):
             ' '.join(cmd), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env={**os.environ}
         )
         outs, errs = proc.communicate()
-        logging.info("Output:")
-        print(outs)
-        logging.info("Stderr:")
-        print(errs)
+
+        logging.info("Output: {}".format(outs.decode('utf-8')))
+        logging.error("Stderr: {}".format(errs.decode('utf-8')))
+
         if proc.returncode != 0:
             raise Exception("Process failed: {0}".format(proc.returncode))
 
@@ -127,7 +129,7 @@ class SqlcmdHook(DbApiHook):
         Execute SQL file with sqlcmd.
         '''
         conn = self.get_conn()
-        cmd = ['/opt/mssql-tools/bin/sqlcmd', '-i', '"{}"'.format(file)]
+        cmd = ['/opt/mssql-tools/bin/sqlcmd', '-b', '-i', '"{}"'.format(file)]
         self.add_conn_details(cmd, conn)
         self.run_sqlcmd(cmd)
 
@@ -136,7 +138,7 @@ class SqlcmdHook(DbApiHook):
         Execute SQL query using sqlcmd.
         '''
         conn = self.get_conn()
-        cmd = ['/opt/mssql-tools/bin/sqlcmd', '-Q', '"{}"'.format(query)]
+        cmd = ['/opt/mssql-tools/bin/sqlcmd', '-b', '-Q', '"{}"'.format(query)]
         self.add_conn_details(cmd, conn)
         self.run_sqlcmd(cmd)
 
