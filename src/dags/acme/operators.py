@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import csv
 import logging
 import tempfile
-import csv
 
 
 from datetime import date
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
-from acme.hooks import MsSqlHook, BcpHook
+from acme.hooks import MsSqlHook, BcpHook, SqlcmdHook
 
 
 class MsSqlDataImportOperator(BaseOperator):
@@ -128,3 +128,70 @@ class MsSqlOperator(BaseOperator):
                          schema=self.database)
         hook.run(self.sql, autocommit=self.autocommit,
                  parameters=self.parameters)
+
+
+
+class SqlcmdOperator(BaseOperator):
+    """
+    Executes sql code in a specific Microsoft SQL database using sqlcmd tool
+    :param mssql_conn_id: reference to a specific mssql database
+    :type mssql_conn_id: string
+    :param sql: the sql code to be executed
+    :type sql: string (SQL query)
+    :param database: name of database which overwrite defined one in connection
+    :type database: string
+    """
+
+    template_fields = ('sql',)
+    template_ext = ('.sql',)
+    ui_color = '#ededed'
+
+    @apply_defaults
+    def __init__(
+            self, sql, mssql_conn_id='mssql_default', parameters=None,
+            autocommit=False, database=None, *args, **kwargs):
+        super(SqlcmdOperator, self).__init__(*args, **kwargs)
+        self.mssql_conn_id = mssql_conn_id
+        self.sql = sql
+        self.parameters = parameters
+        self.autocommit = autocommit
+        self.database = database
+
+    def execute(self, context):
+        logging.info('Executing: {}'.format(self.sql))
+        hook = SqlcmdHook(mssql_conn_id=self.mssql_conn_id,
+                         schema=self.database)
+
+        hook.exec_sql_query(self.sql)
+
+
+class SqlcmdFilesOperator(BaseOperator):
+    """
+    Executes sql code in a specific Microsoft SQL database using sqlcmd tool
+    :param mssql_conn_id: reference to a specific mssql database
+    :type mssql_conn_id: string
+    :param sql: the sql files to be executed
+    :type sql: string representing path to sql file or their list
+    :param database: name of database which overwrite defined one in connection
+    :type database: string
+    """
+
+    ui_color = '#ededed'
+
+    @apply_defaults
+    def __init__(
+            self, sql, mssql_conn_id='mssql_default', parameters=None,
+            autocommit=False, database=None, *args, **kwargs):
+        super(SqlcmdFilesOperator, self).__init__(*args, **kwargs)
+        self.mssql_conn_id = mssql_conn_id
+        self.sql = sql
+        self.parameters = parameters
+        self.autocommit = autocommit
+        self.database = database
+
+    def execute(self, context):
+        logging.info('Executing: {}'.format(str(self.sql)))
+        hook = SqlcmdHook(mssql_conn_id=self.mssql_conn_id,
+                         schema=self.database)
+
+        hook.exec_sql_files(self.sql)
