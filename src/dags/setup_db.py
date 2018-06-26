@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from airflow import models
 from airflow.settings import Session
 from airflow.models import Variable
-from acme.operators import MsSqlOperator
+from acme.operators import MsSqlOperator, SqlcmdOperator, SqlcmdFilesOperator
 
 
 args = {
@@ -36,16 +36,16 @@ t0 = MsSqlOperator(
 
 # Create timesheet table (Data Lake)
 t1 = MsSqlOperator(
-    task_id='create_otfn_timesheet_table',
-    sql='create_otfn_timesheet_table.sql',
+    task_id='create_timesheet_table',
+    sql='create_timesheet_table.sql',
     mssql_conn_id='mssql_datalake',
     dag=dag
 )
 
 # Create otfn table (Application)
-t2 = MsSqlOperator(
-    task_id='create_otfn_otfn_table',
-    sql='create_otfn_otfn_table.sql',
+t2 = SqlcmdFilesOperator(
+    task_id='create_otfn_table',
+    sql='sql/create_otfn_table.sql',
     mssql_conn_id='mssql_app',
     dag=dag
 )
