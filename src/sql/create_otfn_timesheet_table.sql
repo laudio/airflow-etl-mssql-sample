@@ -1,4 +1,4 @@
-CREATE TABLE otfn.timesheet
+CREATE TABLE timesheet
 (
     employee_id INT NOT NULL,
     [date] date NOT NULL,

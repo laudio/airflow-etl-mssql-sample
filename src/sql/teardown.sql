@@ -1,2 +1,1 @@
-DROP TABLE IF EXISTS otfn.timesheet;
-DROP SCHEMA IF EXISTS otfn;
+DROP TABLE IF EXISTS timesheet;

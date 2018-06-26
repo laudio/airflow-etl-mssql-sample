@@ -1,4 +1,4 @@
-CREATE TABLE otfn.employee_otfn
+CREATE TABLE employee_otfn
 (
     employee_id INT NOT NULL,
     [date] date NOT NULL,

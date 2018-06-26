@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-
-import logging
+import os
 import pyodbc
+import logging
 import subprocess
 
 from airflow.hooks.dbapi_hook import DbApiHook
@@ -29,7 +29,8 @@ class BcpHook(DbApiHook):
     def run_bcp(self, cmd):
         logging.info("Running command: {0}".format(cmd))
         proc = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+           ' '.join(cmd), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env={**os.environ}
+        )
         outs, errs = proc.communicate()
         logging.info("Output:")
         print(outs)
@@ -46,7 +47,7 @@ class BcpHook(DbApiHook):
     def generate_format_file(self, table_name, format_file):
         # Generate format file first:
         conn = self.get_conn()
-        cmd = ['bcp', table_name, 'format', 'nul',
+        cmd = ['/opt/mssql-tools/bin/bcp', table_name, 'format', 'nul',
                '-c', '-f', format_file.name, '-t,']
         self.add_conn_details(cmd, conn)
         self.run_bcp(cmd)
@@ -54,7 +55,7 @@ class BcpHook(DbApiHook):
     def import_data(self, format_file, data_file, table_name):
         # Generate format file first:
         conn = self.get_conn()
-        cmd = ['bcp', table_name, 'in', data_file, '-f', format_file]
+        cmd = ['/opt/mssql-tools/bin/bcp', table_name, 'in', data_file, '-f', format_file]
         self.add_conn_details(cmd, conn)
         self.run_bcp(cmd)
 

@@ -34,16 +34,8 @@ t0 = MsSqlOperator(
     dag=dag
 )
 
-# Create Schema
-t1 = MsSqlOperator(
-    task_id='create_otfn_schema',
-    sql='create_otfn_schema.sql',
-    mssql_conn_id='mssql_datalake',
-    dag=dag
-)
-
 # Create timesheet table (Data Lake)
-t2 = MsSqlOperator(
+t1 = MsSqlOperator(
     task_id='create_otfn_timesheet_table',
     sql='create_otfn_timesheet_table.sql',
     mssql_conn_id='mssql_datalake',
@@ -51,7 +43,7 @@ t2 = MsSqlOperator(
 )
 
 # Create otfn table (Application)
-t3 = MsSqlOperator(
+t2 = MsSqlOperator(
     task_id='create_otfn_otfn_table',
     sql='create_otfn_otfn_table.sql',
     mssql_conn_id='mssql_app',
@@ -59,4 +51,4 @@ t3 = MsSqlOperator(
 )
 
 # Execution Order
-t0 >> t1 >> t2 >> t3
+t0 >> t1 >> t2
