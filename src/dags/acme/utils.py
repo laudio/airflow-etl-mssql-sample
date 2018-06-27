@@ -1,5 +1,6 @@
 ''' Utility functions. '''
 
+import os
 
 def is_string(obj):
     ''' Check if the object is a string. '''
@@ -17,3 +18,7 @@ def is_iterable(obj):
     has_get_item = hasattr(obj, '__getitem__')
 
     return has_iter or has_get_item
+
+def set_env(env_dict):
+    for env_key, value in env_dict.items():
+        os.environ[env_key] = value

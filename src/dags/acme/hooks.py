@@ -49,7 +49,7 @@ class BcpHook(DbApiHook):
     def generate_format_file(self, table_name, format_file):
         # Generate format file first:
         conn = self.get_conn()
-        cmd = ['/opt/mssql-tools/bin/bcp', table_name, 'format', 'nul',
+        cmd = ['bcp', table_name, 'format', 'nul',
                '-c', '-f', format_file.name, '-t,']
         self.add_conn_details(cmd, conn)
         self.run_bcp(cmd)
@@ -57,7 +57,7 @@ class BcpHook(DbApiHook):
     def import_data(self, format_file, data_file, table_name):
         # Generate format file first:
         conn = self.get_conn()
-        cmd = ['/opt/mssql-tools/bin/bcp', table_name,
+        cmd = ['bcp', table_name,
                'in', data_file, '-f', format_file]
         self.add_conn_details(cmd, conn)
         self.run_bcp(cmd)
@@ -129,7 +129,7 @@ class SqlcmdHook(DbApiHook):
         Execute SQL file with sqlcmd.
         '''
         conn = self.get_conn()
-        cmd = ['/opt/mssql-tools/bin/sqlcmd', '-b', '-i', '"{}"'.format(file)]
+        cmd = ['sqlcmd', '-b', '-i', '"{}"'.format(file)]
         self.add_conn_details(cmd, conn)
         self.run_sqlcmd(cmd)
 
@@ -138,7 +138,7 @@ class SqlcmdHook(DbApiHook):
         Execute SQL query using sqlcmd.
         '''
         conn = self.get_conn()
-        cmd = ['/opt/mssql-tools/bin/sqlcmd', '-b', '-Q', '"{}"'.format(query)]
+        cmd = ['sqlcmd', '-b', '-Q', '"{}"'.format(query)]
         self.add_conn_details(cmd, conn)
         self.run_sqlcmd(cmd)
 

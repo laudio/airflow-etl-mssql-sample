@@ -47,6 +47,7 @@ t2 = SqlcmdFilesOperator(
     task_id='create_otfn_table',
     sql='sql/create_otfn_table.sql',
     mssql_conn_id='mssql_app',
+    env={},
     dag=dag
 )
 

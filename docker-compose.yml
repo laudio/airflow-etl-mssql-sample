@@ -21,7 +21,7 @@ services:
     ports:
       - 1444:1433
 
-  airflow: 
+  airflow:
     image: laudio/airflow-mssql:1.0.2
     container_name: airflow
     restart: always
@@ -32,6 +32,7 @@ services:
       - LOAD_EX=n
       - EXECUTOR=Local
       - FERNET_KEY=${FERNET_KEY}
+      - PATH=$PATH:/opt/mssql-tools/bin
       - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
 
     volumes:

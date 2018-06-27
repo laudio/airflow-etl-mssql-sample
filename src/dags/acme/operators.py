@@ -4,10 +4,10 @@ import csv
 import logging
 import tempfile
 
-
-from datetime import date
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
+
+from acme.utils import set_env
 from acme.hooks import MsSqlHook, BcpHook, SqlcmdHook
 
 
@@ -130,7 +130,6 @@ class MsSqlOperator(BaseOperator):
                  parameters=self.parameters)
 
 
-
 class SqlcmdOperator(BaseOperator):
     """
     Executes sql code in a specific Microsoft SQL database using sqlcmd tool
@@ -150,9 +149,11 @@ class SqlcmdOperator(BaseOperator):
     def __init__(
             self, sql, mssql_conn_id='mssql_default', parameters=None,
             autocommit=False, database=None, *args, **kwargs):
+        env = kwargs.pop('env') or {}
         super(SqlcmdOperator, self).__init__(*args, **kwargs)
         self.mssql_conn_id = mssql_conn_id
         self.sql = sql
+        self.env = env
         self.parameters = parameters
         self.autocommit = autocommit
         self.database = database
@@ -160,8 +161,8 @@ class SqlcmdOperator(BaseOperator):
     def execute(self, context):
         logging.info('Executing: {}'.format(self.sql))
         hook = SqlcmdHook(mssql_conn_id=self.mssql_conn_id,
-                         schema=self.database)
-
+                          schema=self.database)
+        set_env(self.env)
         hook.exec_sql_query(self.sql)
 
 
@@ -182,16 +183,19 @@ class SqlcmdFilesOperator(BaseOperator):
     def __init__(
             self, sql, mssql_conn_id='mssql_default', parameters=None,
             autocommit=False, database=None, *args, **kwargs):
+        env = kwargs.pop('env') or {}
         super(SqlcmdFilesOperator, self).__init__(*args, **kwargs)
         self.mssql_conn_id = mssql_conn_id
         self.sql = sql
         self.parameters = parameters
         self.autocommit = autocommit
         self.database = database
+        self.env = env
 
     def execute(self, context):
         logging.info('Executing: {}'.format(str(self.sql)))
         hook = SqlcmdHook(mssql_conn_id=self.mssql_conn_id,
-                         schema=self.database)
+                          schema=self.database)
 
+        set_env(self.env)
         hook.exec_sql_files(self.sql)
