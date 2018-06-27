@@ -20,7 +20,7 @@ services:
       - 1444:1433
 
   webserver:
-    image: laudio/airflow-mssql:latest
+    image: laudio/airflow-mssql:1.0.2
     container_name: airflow-webserver
     restart: always
     depends_on:
