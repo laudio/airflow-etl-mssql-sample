@@ -19,9 +19,9 @@ services:
     ports:
       - 1444:1433
 
-  webserver:
+  airflow: 
     image: laudio/airflow-mssql:1.0.2
-    container_name: airflow-webserver
+    container_name: airflow
     restart: always
     depends_on:
       - postgres
