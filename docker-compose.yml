@@ -10,7 +10,7 @@ services:
     ports:
       - 5444:5432
     volumes:
-      - './pgdata:/var/lib/postgresql/data'
+      - '${PGDATA_PATH:-./pgdata}:/var/lib/postgresql/data'
 
   mssql:
     image: microsoft/mssql-server-linux:latest
