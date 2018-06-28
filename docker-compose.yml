@@ -4,13 +4,13 @@ services:
     image: postgres:10
     container_name: airflow-db
     environment:
-      - POSTGRES_USER=airflow
-      - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
+      - POSTGRES_USER=${AIRFLOW_DB_USER:-airflow}
+      - POSTGRES_PASSWORD=${AIRFLOW_DB_PASSWORD:-airflow}
+      - POSTGRES_DB=${AIRFLOW_DB:-airflow}
     ports:
-      - 5444:5432
+      - ${AIRFLOW_DB_EXT_PORT:-5444}:5432
     volumes:
-      - '${PGDATA_PATH:-./.pgdata}:/var/lib/postgresql/data'
+      - '${AIRFLOW_DB_DATA_PATH:-./.pgdata}:/var/lib/postgresql/data'
 
   mssql:
     image: microsoft/mssql-server-linux:latest
@@ -40,6 +40,6 @@ services:
       - ./src/sql:/usr/local/airflow/sql
       - ./data:/usr/local/airflow/data
     ports:
-      - 8081:8080
+      - ${AIRFLOW_WEB_EXT_PORT:-8081}:8080
     command: webserver
 
