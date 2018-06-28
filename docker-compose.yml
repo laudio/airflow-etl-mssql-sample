@@ -32,8 +32,8 @@ services:
       - LOAD_EX=n
       - EXECUTOR=Local
       - FERNET_KEY=${FERNET_KEY}
-      - PATH=$PATH:/opt/mssql-tools/bin
       - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
+      - PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mssql-tools/bin
 
     volumes:
       - ./src/dags:/usr/local/airflow/dags

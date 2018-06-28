@@ -51,5 +51,14 @@ t2 = SqlcmdFilesOperator(
     dag=dag
 )
 
+# Create linked server
+t3 = SqlcmdFilesOperator(
+    task_id='create_linked_servers',
+    sql='sql/create_linked_server.sql',
+    mssql_conn_id='mssql_app',
+    env={'HOST_IP': Variable.get('HOST_IP')},
+    dag=dag
+)
+
 # Execution Order
-t0 >> t1 >> t2
+t0 >> t1 >> t2 >> t3

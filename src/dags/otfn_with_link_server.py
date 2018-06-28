@@ -37,7 +37,7 @@ t1 = MsSqlDataImportOperator(
 t2 = SqlcmdFilesOperator(
     task_id='otfn_with_link_servers',
     sql='sql/otfn_with_link_server.sql',
-    env={'SERVER': '64849c5b8900', 'DATABASE': 'datalake'},
+    env={'SERVER': 'ETL_SERVER', 'DATABASE': 'datalake'},
     mssql_conn_id='mssql_app',
     dag=dag
 )

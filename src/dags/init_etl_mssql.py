@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+import os
 import airflow
 import logging
 
@@ -35,26 +36,6 @@ def initialize_etl():
 
         session.add(new_conn)
         session.commit()
-
-    create_new_conn(session, {
-        "conn_id": "mssql_datalake",
-        "conn_type": "MS SQL Server",
-        "host": "mssql",
-        "port": 1433,
-        "schema": "datalake",
-        "login": "sa",
-        "password": "Th1sS3cret!"
-    })
-
-    create_new_conn(session, {
-        "conn_id": "mssql_app",
-        "conn_type": "MS SQL Server",
-        "host": "mssql",
-        "port": 1433,
-        "schema": "app",
-        "login": "sa",
-        "password": "Th1sS3cret!"
-    })
 
     new_var = models.Variable()
     new_var.key = "sql_path"
