@@ -18,22 +18,22 @@ $ ./run.sh
 ## Airflow Connections
 
 * MSSQL Datalake connection:
-  `conn_id`: "mssql_datalake",
-  `conn_type`: "MS SQL Server",
-  `host`: `HOST_IP`,
-  `port`: 1433,
-  `schema`: "datalake",
-  `login`: "sa",
-  `password`: "Th1sS3cret!"
+  * `conn_id`: "mssql_datalake",
+  * `conn_type`: "MS SQL Server",
+  * `host`: `HOST_IP`,
+  * `port`: 1433,
+  * `schema`: "datalake",
+  * `login`: "sa",
+  * `password`: "Th1sS3cret!"
 
 * MSSQL App connection:
-  `conn_id`: "mssql_app",
-  `conn_type`: "MS SQL Server",
-  `host`: `HOST_IP`,
-  `port`: 1433,
-  `schema`: "app",
-  `login`: "sa",
-  `password`: "Th1sS3cret!"
+  * `conn_id`: "mssql_app",
+  * `conn_type`: "MS SQL Server",
+  * `host`: `HOST_IP`,
+  * `port`: 1433,
+  * `schema`: "app",
+  * `login`: "sa",
+  * `password`: "Th1sS3cret!"
 
 ## Environment Variables
 
