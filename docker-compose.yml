@@ -22,7 +22,7 @@ services:
       - 1444:1433
 
   airflow:
-    image: laudio/airflow-mssql:1.0.2
+    image: laudio/airflow-mssql:1.0.3
     container_name: airflow
     restart: always
     depends_on:
@@ -33,9 +33,10 @@ services:
       - EXECUTOR=Local
       - FERNET_KEY=${FERNET_KEY}
       - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW__CORE__FERNET_KEY}
-      - PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mssql-tools/bin
+      - PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/mssql-tools/bin:/usr/local/airflow/.local/bin
 
     volumes:
+      - ~/.ssh:/usr/local/airflow/.ssh
       - ./src/dags:/usr/local/airflow/dags
       - ./src/etl:/usr/local/airflow/etl
       - ./src/sql:/usr/local/airflow/sql
