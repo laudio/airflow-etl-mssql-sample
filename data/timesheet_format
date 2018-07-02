@@ -1,0 +1,6 @@
+14.0
+4
+1       SQLCHAR             0       12      ","    1     employee_id                                                  ""
+2       SQLCHAR             0       11      ","    2     date                                                         ""
+3       SQLCHAR             0       19      ","    3     punch_in_time                                                ""
+4       SQLCHAR             0       19      "\n"   4     punch_out_time                                               ""
