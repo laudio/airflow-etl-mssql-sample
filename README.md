@@ -2,20 +2,55 @@
 
 Sample Project with Airflow with MS SQL.
 
+## Setup and Configuration
+
+#### Configure
+Create a new configuration file `airflow.cfg`.
+```bash
+ $ cp src/config/airflow.cfg.example src/config/airflow.cfg
+```
+
+#### Setup First User
+Run it first.
+```
+$ docker-compose up
+```
+
+Now in a separate terminal run `python` in the running airflow container.
+```
+$ docker-compose exec airflow python
+```
+
+Run the following in the prompt to create a new user for airflow.
+```bash
+Python 3.6.5 (default, Jun  6 2018, 02:51:26)
+[GCC 6.3.0 20170516] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import airflow
+>>> from airflow import models, settings
+>>> from airflow.contrib.auth.backends.password_auth import PasswordUser
+>>> user = PasswordUser(models.User())
+>>> user.username = 'username'
+>>> user.email = 'user@example.com'
+>>> user._set_password = 'password'
+>>> session = settings.Session()
+>>> session.add(user)
+>>> session.commit()
+>>> session.close()
+>>> exit()
+```
+
+#### Login to the UI
+Now that you've setup a user you can go to the airflow UI http://0.0.0.0:8081 and login.
+
 ## Usage
 
 Spin up the containers.
 
 ```bash
-# Run this command in airflow-etl-mssql-sample directory
-$ ./run.sh
+$ docker-compose up
 ```
 
-## Configuration
-
-```bash
- $ cp src/config/airflow.cfg.example src/config/airflow.cfg
-```
 
 ## Airflow Variables
 
