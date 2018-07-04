@@ -2,6 +2,8 @@
 
 Sample Project with Airflow with MS SQL.
 
+Uses this [laudio/airflow-mssql](https://github.com/laudio/docker-airflow-mssql) docker image for airflow.
+
 ## Setup and Configuration
 
 #### Configure
