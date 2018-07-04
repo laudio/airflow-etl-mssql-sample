@@ -11,6 +11,12 @@ Spin up the containers.
 $ ./run.sh
 ```
 
+## Configuration
+
+```bash
+ $ cp src/config/airflow.cfg.example src/config/airflow.cfg
+```
+
 ## Airflow Variables
 
 * `HOST_IP`: IP address of the SQL Server host
