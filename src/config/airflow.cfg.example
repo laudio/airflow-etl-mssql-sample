@@ -40,6 +40,7 @@ executor = SequentialExecutor
 # SqlAlchemy supports many different database engine, more information
 # their website
 # sql_alchemy_conn = sqlite:////tmp/airflow.db
+sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@postgres/airflow
 
 # The SqlAlchemy pool size is the maximum number of database connections
 # in the pool.
@@ -178,10 +179,11 @@ expose_config = True
 
 # Set to true to turn on authentication:
 # http://pythonhosted.org/airflow/security.html#web-authentication
-authenticate = False
+authenticate = True
+auth_backend = airflow.contrib.auth.backends.password_auth
 
 # Filter the list of dags by owner name (requires authentication to be enabled)
-filter_by_owner = False
+filter_by_owner = True
 
 # Filtering mode. Choices include user (default) and ldapgroup.
 # Ldap group filtering requires using the ldap backend
