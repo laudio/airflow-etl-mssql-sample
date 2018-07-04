@@ -41,6 +41,7 @@ services:
       - ./src/etl:/usr/local/airflow/etl
       - ./src/sql:/usr/local/airflow/sql
       - ./src/scripts:/usr/local/airflow/scripts
+      - ./src/config/airflow.cfg:/usr/local/airflow/airflow.cfg
       - ./data:/usr/local/airflow/data
     ports:
       - ${AIRFLOW_WEB_EXT_PORT:-8081}:8080
