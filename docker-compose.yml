@@ -22,7 +22,7 @@ services:
       - 1444:1433
 
   airflow:
-    image: laudio/airflow-mssql:1.0.3
+    image: laudio/airflow-mssql:1.0.4
     container_name: airflow
     restart: always
     depends_on:
