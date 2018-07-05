@@ -1,5 +1,7 @@
 import airflow
 from airflow.models import Variable
+from airflow.operators import SlackAPIPostOperator
+from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.bash_operator import BashOperator
 
 
@@ -27,4 +29,39 @@ t0 = BashOperator(
     dag=dag
 )
 
-t0
+t1 = SlackAPIPostOperator(
+    channel=Variable.get('slack_channel'),
+    trigger_rule=TriggerRule.ALL_SUCCESS,
+    token=Variable.get('slack_token'),
+    username='airflow',
+    text='Timesheet file retrieval action complete.',
+    attachments=[
+        {
+            'text': 'Timesheet file retrieval successful.',
+            'color': '#449944',
+            'mrkdwn_in': ['text']
+        }
+    ],
+    task_id='slack_success',
+    dag=dag
+)
+
+t2 = SlackAPIPostOperator(
+    channel=Variable.get('slack_channel'),
+    trigger_rule=TriggerRule.ONE_FAILED,
+    token=Variable.get('slack_token'),
+    username='airflow',
+    text='Timesheet file retrieval action failed.',
+    attachments=[
+        {
+            'text': 'Timesheet file retrieval failed.',
+            'color': '#CC4444',
+            'mrkdwn_in': ['text']
+        }
+    ],
+    task_id='slack_failure',
+    dag=dag
+)
+
+t0 >> t1
+t0 >> t2
